@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 어떤 곳에 있는 맵퍼를 사용할지 경로를 넣어줘야함 -->
+<mapper namespace="com.pompom.www.board.mapper.BoardMapper">
+	<resultMap id="boardDTOResultMap"
+		type="com.pompom.www.board.dto.BoardDTO">
+		<id property="Bno" column="Bno" />
+		<result property="boardId" column="boardId" />
+		<result property="topikId" column="topikId" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="createDate" column="createdate" />
+		<result property="modifyDate" column="modifydate" />
+		<result property="likes" column="likes" />
+		<result property="views" column="views" />
+		<result property="memberId" column="memberId" />
+		<result property="replyCnt" column="replyCnt" />
+		<association property="topikDTO" resultMap="topikDTOResultMap" />
+		<association property="boardTagDTO" resultMap="BoardtagDTOResultMap" />
+	</resultMap>
+
+	<!-- Define the topikDTOResultMap -->
+	<resultMap id="topikDTOResultMap"
+		type="com.pompom.www.board.dto.TopikDTO">
+		<id property="topikId" column="topikId" />
+		<result property="topikname" column="topikname" />
+	</resultMap>
+
+	<!-- Define the BoardtagDTOResultMap -->
+	<resultMap id="BoardtagDTOResultMap"
+		type="com.pompom.www.board.dto.BoardTagDTO">
+		<id property="Bno" column="Bno" />
+		<association property="tagDTO" resultMap="tagDTOResultMap" />
+	</resultMap>
+
+	<!-- Define the tagDTOResultMap if needed -->
+	<resultMap id="tagDTOResultMap"
+		type="com.pompom.www.board.dto.TagDTO">
+		<id property="tagId" column="tagId" />
+		<result property="name" column="name" />
+	</resultMap>
+
+	<select id="mainQuestionsList" resultType="com.pompom.www.board.dto.BoardDTO">
+			select * from board where boardid = 1 order by createdate desc
+	</select>
+
+	<select id="questionsList" resultMap="boardDTOResultMap">
+		<![CDATA[
+			SELECT *
+				FROM (
+				    SELECT 
+				        b.bno,
+				        b.memberId,
+				        b.title,
+				        b.content,
+				        b.createDate,
+				        b.modifyDate,
+				        b.likes,
+				        b.views,
+				        t.topikname,
+				        COUNT(r.rno) AS replyCnt,
+				        ROW_NUMBER() OVER (ORDER BY b.createDate DESC) AS rn
+				    FROM
+				        board b
+				    JOIN
+				        topik t ON b.topikid = t.topikid
+				    LEFT JOIN
+				        reply r ON b.bno = r.bno
+				    GROUP BY
+				        b.bno,
+				        b.memberId,
+				        b.title,
+				        b.content,
+				        b.createDate,
+				        b.modifyDate,
+				        b.likes,
+				        b.views,
+				        t.topikname
+				) 
+				WHERE rn BETWEEN #{start} AND #{end}
+		    	]]>
+	</select>
+	
+	<select id="getTotalQuestions" resultType="int">
+    	SELECT COUNT(*) FROM board where boardId= 1
+	</select>
+
+
+	<insert id="write">
+
+		<selectKey keyProperty="Bno" order="BEFORE"
+			resultType="long">
+			select bno_seq.nextval from dual
+		</selectKey>
+
+		insert into board(Bno,title,content,boardId,topikId,memberId)
+		VALUES(#{Bno},#{title},#{content},#{boardId},#{topikId},#{memberId})
+	</insert>
+
+
+	<select id="selectTagList" resultType="java.util.List">
+		SELECT name
+		FROM tag
+		WHERE
+		name like '%'||#{param}||'%'
+	</select>
+
+
+	<select id="searchTag" resultType="com.pompom.www.board.dto.TagDTO">
+		SELECT tagId
+		FROM tag
+		WHERE name
+		= #{param}
+	</select>
+
+	<insert id="writeTag">
+
+		<selectKey keyProperty="tagId" order="BEFORE" resultType="long">
+			select tag_seq.nextval from dual
+		</selectKey>
+
+		insert into tag(tagId, name) values(#{tagId}, #{name})
+	</insert>
+
+
+	<insert id="writeBoardTag" parameterType="java.util.List">
+
+		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" ">
+			into
+			board_tag(bno, tagId)
+			values (
+			#{item.bno}
+			, #{item.tagId}
+
+			)
+		</foreach>
+	</insert>
+	
+	<update id="viewsUp">
+		update board set views = views+1 where bno = #{bno}
+	</update>
+	
+	<select id="questionsGet" resultMap="boardDTOResultMap">
+			SELECT
+		    b.bno,
+		    b.memberId,
+		    b.createDate,
+		    b.modifyDate,
+		    b.likes,
+		    b.views,
+		    b.title,
+		    b.content,
+		    t.topikname,
+		    tg.name
+		FROM
+		    board b
+		    JOIN topik t ON b.topikId = t.topikId
+		    LEFT JOIN board_tag bt ON b.bno = bt.bno
+		    LEFT JOIN tag tg ON bt.tagId = tg.tagId
+		WHERE
+		    b.bno = #{bno}
+	</select>
+	
+	<select id="tagCountList" resultType="com.pompom.www.board.dto.BoardTagCountDTO">
+		<![CDATA[
+		SELECT tagId, name, usage_count
+			FROM (
+			    SELECT t.tagId, t.name, COUNT(bt.Bno) as usage_count
+			    FROM tag t
+			    LEFT JOIN board_tag bt ON t.tagId = bt.tagId
+			    GROUP BY t.tagId, t.name
+			    ORDER BY COUNT(bt.Bno) DESC
+			)
+		WHERE ROWNUM <= 5
+		]]>
+	</select>
+	
+	<select id="topWriterList" resultType="com.pompom.www.board.dto.BoardTopWritersDTO">
+		<![CDATA[
+		SELECT memberId, total_posts
+			FROM (
+			    SELECT memberId, COUNT(*) AS total_posts,
+			           RANK() OVER (ORDER BY COUNT(*) DESC) AS rnk
+			    FROM board
+			    WHERE boardId = 1
+			    GROUP BY memberId
+			)
+		WHERE rnk <= 5
+		]]>
+	</select>
+	
+	<select id="BoardTagList" resultType="com.pompom.www.board.dto.BoardTagDTO">
+		select b.bno, tg.name
+		from board b,topik t ,board_tag bt, tag tg
+		where b.topikid = t.topikid and
+		b.bno = bt.bno and
+		bt.tagId = tg.tagId
+	</select>
+	
+	<delete id="boardTagDelete">
+		DELETE FROM board_tag WHERE bno = #{bno}
+	</delete>
+	
+	<delete id="delete">
+		delete from board where bno = #{bno}
+	</delete>
+	
+	<update id="modify">
+		update board set title = #{title} , content = #{content} , boardId = #{boardId},modifyDate = sysdate , topikId = #{topikId},memberId = #{memberId} where bno = #{bno}
+	</update>
+	
+	<update id="likesUp">
+		update board set likes = likes+1 where bno = #{bno}
+	</update>
+	
+	<select id="searchHashTag" resultType="com.pompom.www.board.dto.QuestionDTO">
+		SELECT b.*, tg.name as hashtag, a.*
+		FROM board b
+		INNER JOIN topik t ON b.topikid = t.topikid
+		INNER JOIN board_tag bt ON b.bno = bt.bno
+		INNER JOIN tag tg ON bt.tagId = tg.tagId
+		LEFT JOIN attach a ON b.memberId = a.memberId
+		WHERE tg.name = #{tagName} order by b.createdate desc
+	</select>
+	
+	<insert id="scrapInsert">
+		<selectKey keyProperty="sno" order="BEFORE" resultType="long">
+			select sno_seq.nextval from dual
+		</selectKey>
+		insert into scrap (sno,bno,memberId,createDate) values(#{sno}, #{bno},#{memberId},sysdate)
+	</insert>
+	
+	<select id="scrapCheck" resultType="int">
+		select count(*) from scrap where bno = #{bno} and memberid = #{memberId}
+	</select>
+	
+	<delete id="scrapCancel">
+		delete from scrap where bno = #{bno} and memberid = #{memberId}
+	</delete>
+	
+	<select id="scrapList" resultType="com.pompom.www.board.dto.ScrapDTO">
+		select b.bno,b.title,s.createDate,t.topikname from board b,scrap s,topik t
+		where b.bno = s.bno 
+		and t.topikid = b.topikid
+		and s.memberid = #{memberId}
+	</select>
+	
+</mapper>
+  

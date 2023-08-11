@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+/* footer css */
+
+.row a i{
+	padding: 20px;
+	color:black;
+}
+
+.list-unstyled ul{
+	list-style:none;
+}
+
+.list-unstyled li a{
+	text-decoration: none;
+	color: black;
+}
+
+.list-unstyled li a:hover{
+	color:dodgerblue;
+}
+
+.list-unstyled li{
+    float: left;
+    margin-right: 20px;
+    font-size: 13px;
+    
+}
+.i-a a{
+	text-decoration: none;
+
+}
+
+.f-p{
+	color: #cccccc;
+	font-size: 12px;
+}
+
+@media screen and (max-width: 768px) {
+	.col-md-4 {
+		margin-left:150px; 
+		padding-bottom: 20px;
+	}
+	.f-p{
+		padding-top: 10px;
+	}
+}
+
+
+/*end footer css */
+
+/*-----------------------------------------------------------------------------*/
+
+/* registForm css */
+#box{
+    width:600px;
+    height:1050px;
+    margin:0 auto;
+}
+ul{
+	list-style:none;
+}
+li{
+	float: left;
+}
+.registbtn {
+	text-align: center;
+
+}
+.registbtn button{
+	margin: 10px;
+	width: 600px;
+}
+.service-div{
+	text-align: center;
+	margin-left: 100px;
+	padding: 10px;
+}
+.service-div ul li{
+	color:#cccccc;
+}
+.service-div ul li a {
+	text-decoration: none;
+	color:dodgerblue;
+	font-weight: bold;
+	font-size: 16px;
+}
+.service-div ul li a:hover {
+	text-decoration: underline;
+}
+.g-recaptcha{
+	padding: 10px;
+}
+.centerbox{
+	text-align: center;
+	align-items: center;
+}
+.registbtn span{
+	font-size: 13px;
+}
+.centerbox span{
+	font-size: 12px;
+	color: #cccc;
+	font-weight: bold;
+}
+
+
+/* end registForm css */
+
+/* 첨부 파일 공용 css */
+	.uploadResult {
+	width: 100%;
+	}
+	
+	.uploadResult ul {
+		display: flex;
+		flex-flow: row;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	
+	.uploadResult ul li {
+		list-style: none;
+		padding: 10px;
+		width: 100%;
+		height: 100%;
+	}
+
+	.uploadResult ul li img {
+		width: 100px;
+	}
+	.bigPictureWrapper {
+	  position: absolute;
+	  display: none;
+	  justify-content: center;
+	  align-items: center;
+	  top:0%;
+	  width:100%;
+	  height:100%;
+	  z-index: 100;
+	  background:rgba(255,255,255,0.5);
+	}
+	.bigPicture {
+	  position: relative;
+	  display:flex;
+	  justify-content: center;
+	  align-items: center;
+	}
+	
+	.bigPicture img {
+	  width:600px;
+	}
+
+	.bd-highlight{
+		position: relative;
+	}
+
+/* end 첨부 파일 공용 css */
+

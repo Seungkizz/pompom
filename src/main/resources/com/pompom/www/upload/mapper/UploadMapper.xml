@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<!--  어떤 곳에 있는 맵퍼를 사용할지 경로를 넣어줘야함 -->
+<mapper namespace="com.pompom.www.upload.mapper.UploadMapper">
+
+	<resultMap id="attachDTOResultMap" type="com.pompom.www.upload.dto.AttachDTO">
+	    <id property="uuid" column="uuid" />
+	    <result property="uploadpath" column="uploadpath" />
+	    <result property="filename" column="filename" />
+	    <result property="filetype" column="filetype" />
+	    <result property="bno" column="bno" />
+	    <result property="memberId" column="memberId" />
+	</resultMap>
+
+  <insert id="insertMemberImg">
+	  	insert into attach(uuid,uploadpath,filename,filetype,memberId) VALUES(#{uuid},#{uploadpath},#{filename},#{filetype},#{memberId})
+  </insert>
+  
+    <insert id="insertBoardImg">
+	  	insert into attach(uuid,uploadpath,filename,filetype,bno) VALUES(#{uuid},#{uploadpath},#{filename},#{filetype},#{bno})
+  </insert>
+  
+  <select id="selectOne" resultType="com.pompom.www.upload.dto.AttachDTO">
+  	select * from attach  where memberId = #{memberId}
+  </select>
+  
+  <select id="selectByBno" resultType="com.pompom.www.upload.dto.AttachDTO">
+  	select * from attach  where bno = #{bno}
+  </select>
+  
+  <select id="selectAll" resultMap="attachDTOResultMap">
+  	select * from attach
+  </select>
+
+  <delete id="delete">
+  	delete from attach where memberId = #{memberId}
+  </delete>
+  
+  <delete id="deleteAll">
+  	delete from attach where bno = #{bno}
+  </delete>
+  
+  <select id="getOldFiles" resultType="com.pompom.www.upload.dto.AttachDTO">
+  	select * from attach where uploadpath = to_char(sysdate -1,'yyyy-mm-dd')
+  </select>
+</mapper>
+  

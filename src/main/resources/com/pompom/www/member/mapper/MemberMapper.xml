@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<!--  어떤 곳에 있는 맵퍼를 사용할지 경로를 넣어줘야함 -->
+<mapper namespace="com.pompom.www.member.mapper.MemberMapper">
+  
+  
+	<select id="selectOneById" resultType="com.pompom.www.member.dto.MemberDTO">
+		select * from member where memberId = #{memberId}
+	</select>
+	  
+	<insert id="insert">
+		insert into member(memberId,password,email,emailCheckno,name) VALUES(#{memberId},#{password},#{email},#{emailCheckno},#{name})
+	</insert>
+
+	<update id="activeScoreUp">
+		update member set activeScore = activeScore + 1 where memberid = #{memberid}
+	</update>
+	
+	<update id="nameUpdate">
+		update member set name = #{name} where memberId = #{memberId}
+	</update>
+  
+</mapper>
+  

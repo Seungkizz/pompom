@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 어떤 곳에 있는 맵퍼를 사용할지 경로를 넣어줘야함 -->
+<mapper namespace="com.pompom.www.board.mapper.ReplyMapper">
+
+	<insert id="insert">
+	
+		<selectKey keyProperty="rno" order="BEFORE" resultType="long">
+			select rno_seq.nextval from dual
+		</selectKey>
+		
+		insert into reply(rno,bno,content,memberId) VALUES(rno_seq.nextval,#{bno},#{content},#{memberId})
+	</insert>
+	
+	<select id="getList" resultType="com.pompom.www.board.dto.ReplyDTO">
+		select * from reply where bno = #{bno} order by createdate
+	</select>
+	
+	<update id="replyModify">
+		update reply set content = #{param2} ,modifyDate = sysdate where rno = #{param1}
+	</update>
+	
+	<delete id="replyDelete">
+		delete from reply where rno = #{rno}
+	</delete>
+	
+	<update id="likeUp">
+		update reply set likes = likes + 1 where rno = #{rno}
+	</update>
+</mapper>
+  

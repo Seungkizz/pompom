@@ -1,1 +1,1 @@
-<h1>Spring Project</h1>
+<h1>Spring Project 개발자 커뮤니티</h1>

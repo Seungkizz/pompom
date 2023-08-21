@@ -9,8 +9,6 @@
 공식홈페이지 : [오키](https://okky.kr)
 ---
 
-### DEMO IMAGE
-
 ### PERIOD
 
 23/07/14 ~ 23/08/04

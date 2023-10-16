@@ -27,6 +27,9 @@
 + reCAPTCHA
 + Tagify
 
+## ERD
+![image](https://github.com/Seungkizz/pompom/assets/130020647/1d4533c3-53de-44a4-bb09-056ae51957a0)
+
 ## 구현 기능
 
 ### User

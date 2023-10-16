@@ -29,6 +29,7 @@
 
 ## 구현 기능
 
+
 ### User
 + 회원가입 : 이메일 인증 통한 회원가입, bcrypt 암호화, Validation
  
@@ -53,4 +54,45 @@
 + 페이징 처리
 
 + 댓글 CRUD
+
+## 회원가입
+![image](https://github.com/Seungkizz/pompom/assets/130020647/1dd1b7ea-6607-4fdf-bee6-5a0963d8d436)
+
+
+
+## 로그인
+![image](https://github.com/Seungkizz/pompom/assets/130020647/5b765934-5b53-4ff8-94b3-109d43842d3f)
+
+
+
+## 게시판 메인
+![image](https://github.com/Seungkizz/pompom/assets/130020647/e4ad284c-40ee-4cc5-b4a7-1cf9ee42a8da)
+
+
+
+## 게시글 작성시
+![image](https://github.com/Seungkizz/pompom/assets/130020647/11867db4-888c-475c-81c4-fcc1bb4e0d42)
+
+
+
+## 게시글 상세보기
+![image](https://github.com/Seungkizz/pompom/assets/130020647/687c4e12-88f7-4bcd-b55c-19510e44fb03)
+
+
+
+## 회원정보 수정
+![image](https://github.com/Seungkizz/pompom/assets/130020647/a96f053a-78e7-4031-9be8-f12894fc10b9)
+
+
+
+## 내 스크랩글 보기
+![image](https://github.com/Seungkizz/pompom/assets/130020647/1a3c2e77-fc81-472c-b31d-37e3d9248cc5)
+
+
+
+
+
+
+
+
 

@@ -13,23 +13,24 @@
 
 23/07/14 ~ 2023/08/04
 
-### 사용 기술
+## 사용 기술
 
 + Git
 + Java
 + Spring Framework
 + Oracle
++ JavaScript
 
-### Library
+## Library
 
 + JavaMail
 + reCAPTCHA
-
++ Tagify
 
 ## 구현 기능
 
 ### User
-+ 회원가입 : 이메일 인증 통한 회원가입
++ 회원가입 : 이메일 인증 통한 회원가입, bcrypt 암호화, Validation
  
 + 로그인: 세션을 활용 한 로그인
  
